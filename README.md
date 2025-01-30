@@ -1,34 +1,42 @@
-# Go Microservices with JWT Authentication
+# Go Microservices with Kubernetes
 
-Este projeto consiste em dois microserviços em Go:
-1. Auth Service: Serviço de autenticação com JWT
-2. API Service: API protegida que utiliza o JWT do Auth Service
+## Project Overview
+This project demonstrates a microservices architecture using Go, Kubernetes, and Docker.
 
-## Requisitos
+## Services
+- **Auth Service**: Handles user authentication and authorization
+- **API Service**: Main application service
+- **PostgreSQL**: Database for storing application data
 
-- Go 1.21+
+## Kubernetes Configuration
+The project uses Kubernetes for container orchestration, with configurations for:
+- Deployments
+- Services
+- Persistent Volume Claims
+- Ingress
+
+## Local Development
+
+### Prerequisites
+- Docker Desktop
+- Kubernetes enabled
+- Go 1.20+
+
+### Running the Project
+1. Build Docker images for each service
+2. Apply Kubernetes configurations:
+   ```bash
+   kubectl apply -f k8s/
+   ```
+3. Access services via Ingress at `localhost`
+
+## Endpoints
+- Auth Service: `/auth/*`
+- API Service: `/api/*`
+
+## Technologies
+- Go
+- Kubernetes
 - Docker
-- Kubernetes (Minikube ou similar)
 - PostgreSQL
-
-## Estrutura do Projeto
-
-```
-.
-├── auth-service/         # Serviço de autenticação
-├── api-service/         # API protegida
-├── k8s/                # Configurações Kubernetes
-└── docker-compose.yml  # Configuração para desenvolvimento local
-```
-
-## Como Executar
-
-1. Iniciar os serviços localmente:
-```bash
-docker-compose up
-```
-
-2. Aplicar as configurações Kubernetes:
-```bash
-kubectl apply -f k8s/
-```
+- NGINX Ingress Controller
