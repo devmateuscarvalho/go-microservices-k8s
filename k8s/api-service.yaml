@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8081
+      targetPort: 8081
+  selector:
+    app: api-service
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api-service
+  template:
+    metadata:
+      labels:
+        app: api-service
+    spec:
+      containers:
+        - name: api-service
+          image: api-service:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8081
+          env:
+            - name: DATABASE_URL
+              value: "host=postgres user=postgres password=postgres dbname=microservices port=5432 sslmode=disable"
+            - name: JWT_SECRET
+              value: "your-secret-key"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 10
+            periodSeconds: 10
